@@ -1,0 +1,40 @@
+name: Building
+
+on:
+  push:
+    branches: ["master"]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21'
+
+      - name: CorePack
+        run: corepack enable
+
+      - name: Install
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: JSPrismarine
+          path: ./*
